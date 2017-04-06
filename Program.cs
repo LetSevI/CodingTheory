@@ -37,6 +37,7 @@ namespace CodingTheory
         {
             Console.WriteLine("Выберите способ кодирования:");
             Console.WriteLine("1. Кодирование Хаффмана");
+            Console.WriteLine("2. Кодирование Шеннона-Фано");
         }
 
         private static IAlgorithm ParseAlgorithm(string input)
@@ -51,6 +52,8 @@ namespace CodingTheory
             {
                 case 1:
                     return new HuffmanCoding();
+                case 2:
+                    return new ShannonFanoCoding();
             }
 
             return null;
