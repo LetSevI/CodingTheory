@@ -95,12 +95,12 @@ namespace CodingTheory
                 return;
             }
 
-            List<Node> orderedNodes = _nodes.OrderByDescending(node => node.Frequency).ToList();
+            List<Node> orderedNodes = nodes.OrderByDescending(node => node.Frequency).ToList();
             int frequency1=0, frequency2=totalFrequency, minDifference = int.MaxValue, i;
-            for (i=0; i<nodes.Count; i++)
+            for (i=0; i< orderedNodes.Count; i++)
             {
-                frequency2 -= nodes[i].Frequency;
-                frequency1 += nodes[i].Frequency;
+                frequency2 -= orderedNodes[i].Frequency;
+                frequency1 += orderedNodes[i].Frequency;
 
                 if (Math.Abs(frequency2 - frequency1) < minDifference)
                     minDifference = Math.Abs(frequency2 - frequency1);
@@ -115,55 +115,9 @@ namespace CodingTheory
             var rightNode = new Node() { Symbol = '*', Frequency = frequency2 };
             current.Left = leftNode;
             current.Right = rightNode;
-            Build(nodes.GetRange(0, i+1),leftNode, frequency1);
-            Build(nodes.GetRange(i+1, nodes.Count-i-1), rightNode, frequency2);
+            Build(orderedNodes.GetRange(0, i+1),leftNode, frequency1);
+            Build(orderedNodes.GetRange(i+1, orderedNodes.Count-i-1), rightNode, frequency2);
             }
         }
-    public class Node
-    {
-        public char Symbol { get; set; }
-        public int Frequency { get; set; }
-        public Node Right { get; set; }
-        public Node Left { get; set; }
-        public bool IsLeaf
-        {
-            get
-            {
-                return (Left == null && Right == null);
-            }
-
-        }
-
-        public List<bool> Traverse(char symbol, List<bool> data)
-        {
-            if (Right == null && Left == null)
-            {
-                return symbol.Equals(this.Symbol) ? data : null;
-            }
-
-            List<bool> left = null;
-            List<bool> right = null;
-
-            if (this.Left != null)
-            {
-                List<bool> leftPath = new List<bool>();
-                leftPath.AddRange(data);
-                leftPath.Add(false);
-
-                left = this.Left.Traverse(symbol, leftPath);
-            }
-
-            if (this.Right != null)
-            {
-                List<bool> rightPath = new List<bool>();
-                rightPath.AddRange(data);
-                rightPath.Add(true);
-
-                right = this.Right.Traverse(symbol, rightPath);
-            }
-
-            return left ?? right;
-        }
-    }
 }
 

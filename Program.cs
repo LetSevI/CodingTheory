@@ -21,6 +21,12 @@ namespace CodingTheory
                 }
 
                 string source = ReadTextFromFile();
+                if (source == "")
+                {
+                    Console.WriteLine("Ошибка! Введите кодируемую строку в файл input.txt");
+                    Console.ReadKey();
+                    return;
+                }
                 string encodeString = _algorithm.Encode(source);
                 Console.WriteLine("Исходная строка:");
                 Console.WriteLine(source);
