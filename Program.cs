@@ -23,7 +23,7 @@ namespace CodingTheory
                 string source = ReadTextFromFile();
                 if (source == "")
                 {
-                    Console.WriteLine("Ошибка! Введите кодируемую строку в файл input.txt");
+                    Console.WriteLine("Ошибка! Введите кодируемую строку в файл bin\\Debug\\input.txt");
                     Console.ReadKey();
                     return;
                 }
