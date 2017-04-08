@@ -6,14 +6,23 @@ namespace CodingTheory
 {
     class ShannonFanoCoding : IAlgorithm
     {
-        private readonly List<Node> _nodes = new List<Node>();
-        private readonly Dictionary<char, int> _frequencies = new Dictionary<char, int>();
+        private List<Node> _nodes = new List<Node>();
+        private Dictionary<char, int> _frequencies = new Dictionary<char, int>();
         private double _compressionRatio = -1;
 
         public Node Root { get; set; }
 
+        public string GetName()
+        {
+            return "Кодирование Шеннона-Фано";
+        }
+
         public string Encode(string input)
         {
+            _nodes = new List<Node>();
+            _frequencies = new Dictionary<char, int>();
+            _compressionRatio = -1;
+
             for (int i = 0; i < input.Length; i++)
             {
                 if (!_frequencies.ContainsKey(input[i]))
@@ -120,4 +129,3 @@ namespace CodingTheory
             }
         }
 }
-
