@@ -6,7 +6,7 @@ namespace CodingTheory
     internal class Program
     {
         private static IAlgorithm _algorithm;
-        private static IAlgorithm[] _algorithmsList = { new HuffmanCoding(), new ShannonFanoCoding() };
+        private static readonly IAlgorithm[] AlgorithmsList = { new HuffmanCoding(), new ShannonFanoCoding(), new ArithmeticCoding() };
 
         private static void Main(string[] args)
         {
@@ -25,7 +25,7 @@ namespace CodingTheory
                 if (input == "10")
                 {
                     Console.WriteLine("Сравнение коэффицентов сжатия:");
-                    foreach (var alg in _algorithmsList)
+                    foreach (IAlgorithm alg in AlgorithmsList)
                     {
                         alg.Encode(source);
                         Console.WriteLine("{0}: {1:0.000}", alg.GetName(), alg.GetCompressionRatio());
@@ -54,9 +54,9 @@ namespace CodingTheory
         private static void PrintMenu()
         {
             Console.WriteLine("Выберите способ кодирования:");
-            for (int i = 0; i < _algorithmsList.Length; i ++)
+            for (int i = 0; i < AlgorithmsList.Length; i ++)
             {
-                Console.WriteLine("{0}. {1}", i+1, _algorithmsList[i].GetName());
+                Console.WriteLine("{0}. {1}", i+1, AlgorithmsList[i].GetName());
             }
             Console.WriteLine("10. Сравнение коэффицентов сжатия");
         }
@@ -64,11 +64,11 @@ namespace CodingTheory
         private static IAlgorithm ParseAlgorithm(string input)
         {
             int id;
-            if (!int.TryParse(input, out id) || (id < 1 || id > _algorithmsList.Length))
+            if (!int.TryParse(input, out id) || (id < 1 || id > AlgorithmsList.Length))
             {
                 return null;
             }
-            return _algorithmsList[id - 1];
+            return AlgorithmsList[id - 1];
         }
 
         private static string ReadTextFromFile(string fileName = "input.txt")

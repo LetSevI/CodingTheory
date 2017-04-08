@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace CodingTheory
 {
-    class ShannonFanoCoding : IAlgorithm
+    public class ShannonFanoCoding : IAlgorithm
     {
         private List<Node> _nodes = new List<Node>();
         private Dictionary<char, int> _frequencies = new Dictionary<char, int>();
@@ -120,8 +120,8 @@ namespace CodingTheory
                 }
             }
 
-            var leftNode = new Node() { Symbol = '*', Frequency = frequency1 };
-            var rightNode = new Node() { Symbol = '*', Frequency = frequency2 };
+            Node leftNode = new Node() { Symbol = '*', Frequency = frequency1 };
+            Node rightNode = new Node() { Symbol = '*', Frequency = frequency2 };
             current.Left = leftNode;
             current.Right = rightNode;
             Build(orderedNodes.GetRange(0, i+1),leftNode, frequency1);
