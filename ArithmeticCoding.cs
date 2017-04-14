@@ -53,7 +53,33 @@ namespace CodingTheory
 
         public string Decode(string input)
         {
-            return "";
+            if (!_frequencies.ContainsKey('$'))
+                return "Ошибка! Строка должна завершаться символом '$'.";
+
+            input = "0," + input;
+            decimal encodedMessage = decimal.Parse(input);
+
+            decimal low = 0.0m;
+            decimal high = 1.0m;
+            string decodedString = string.Empty;
+
+            while (decodedString == "" || decodedString[decodedString.Length-1] != '$')
+            {
+                decimal range = high - low;
+ 
+                high = low + range * _frequencies
+                        .Where(x => low + x.Value * range > encodedMessage)
+                        .Min(x => x.Value); ;
+
+                char nextChar = _frequencies.FirstOrDefault(x => low + x.Value * range > encodedMessage).Key;
+                decodedString += nextChar;
+
+                if (_frequencies[nextChar] != _frequencies.Min(x => x.Value))
+                    low = low + range * _frequencies.Where(x => low + x.Value * range <= encodedMessage)
+                          .Max(x => x.Value);
+            }
+
+            return decodedString;
         }
 
         public double GetCompressionRatio()
