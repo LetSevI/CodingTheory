@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 
 namespace CodingTheory
@@ -44,7 +45,7 @@ namespace CodingTheory
                 }
             }
 
-            string encodedString = low.ToString();
+            string encodedString = low.ToString(CultureInfo.CurrentCulture);
             encodedString = encodedString.Substring(2, encodedString.Length - 2);
 
             _compressionRatio = (double)(encodedString.Length * 4) / (input.Length * 8);
@@ -54,8 +55,8 @@ namespace CodingTheory
 
         public string Decode(string input)
         {
-            input = "0," + input;
-            decimal encodedMessage = decimal.Parse(input);
+            decimal encodedMessage = decimal.Parse(
+                string.Format("0{0}{1}", CultureInfo.CurrentCulture.NumberFormat.CurrencyDecimalSeparator, input));
 
             decimal low = 0.0m;
             decimal high = 1.0m;
@@ -67,7 +68,7 @@ namespace CodingTheory
  
                 high = low + range * _frequencies
                         .Where(x => low + x.Value * range > encodedMessage)
-                        .Min(x => x.Value); ;
+                        .Min(x => x.Value);
 
                 char nextChar = _frequencies.FirstOrDefault(x => low + x.Value * range > encodedMessage).Key;
                 decodedString += nextChar;
