@@ -16,6 +16,7 @@ namespace CodingTheory
         {
             _frequencies = new Dictionary<char, decimal>();
             _compressionRatio = -1;
+            input += 'ソ';
 
             foreach (char ch in input)
             {
@@ -53,9 +54,6 @@ namespace CodingTheory
 
         public string Decode(string input)
         {
-            if (!_frequencies.ContainsKey('$'))
-                return "Ошибка! Строка должна завершаться символом '$'.";
-
             input = "0," + input;
             decimal encodedMessage = decimal.Parse(input);
 
@@ -63,7 +61,7 @@ namespace CodingTheory
             decimal high = 1.0m;
             string decodedString = string.Empty;
 
-            while (decodedString == "" || decodedString[decodedString.Length-1] != '$')
+            while (decodedString == "" || decodedString[decodedString.Length-1] != 'ソ')
             {
                 decimal range = high - low;
  
@@ -79,7 +77,7 @@ namespace CodingTheory
                           .Max(x => x.Value);
             }
 
-            return decodedString;
+            return decodedString.Substring(0, decodedString.Length-1);
         }
 
         public double GetCompressionRatio()
