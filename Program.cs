@@ -6,7 +6,8 @@ namespace CodingTheory
     internal class Program
     {
         private static IAlgorithm _algorithm;
-        private static readonly IAlgorithm[] AlgorithmsList = { new HuffmanCoding(), new ShannonFanoCoding(), new ArithmeticCoding() };
+        private static readonly IAlgorithm[] AlgorithmsList = { new HuffmanCoding(), new ShannonFanoCoding(),
+            new ArithmeticCoding(), new RunLengthEncoding() };
 
         private static void Main(string[] args)
         {
@@ -40,6 +41,7 @@ namespace CodingTheory
                 }
 
                 string encodeString = _algorithm.Encode(source);
+                Console.WriteLine("Алгоритм: {0}", _algorithm.GetName());
                 Console.WriteLine("Исходная строка:");
                 Console.WriteLine(source);
                 Console.WriteLine("Закодированная строка:");
