@@ -42,9 +42,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AdaptiveArithmeticCoding.cs" />
     <Compile Include="ArithmeticCoding.cs" />
     <Compile Include="HuffmanCoding.cs" />
     <Compile Include="IAlgorithm.cs" />
+    <Compile Include="LZ77.cs" />
+    <Compile Include="LZ78.cs" />
     <Compile Include="Node.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
