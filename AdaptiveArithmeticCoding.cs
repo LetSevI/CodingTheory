@@ -69,7 +69,7 @@ namespace CodingTheory
                 string.Format("0{0}{1}", CultureInfo.CurrentCulture.NumberFormat.CurrencyDecimalSeparator, input));
 
             var symbols = _frequencies.Keys.ToList();
-            decimal sumOfFrequencies = (decimal)symbols.Count;
+            decimal sumOfFrequencies = symbols.Count;
 
             decimal low = 0.0m;
             decimal high = 1.0m;

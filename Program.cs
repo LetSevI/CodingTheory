@@ -7,7 +7,7 @@ namespace CodingTheory
     {
         private static IAlgorithm _algorithm;
         private static readonly IAlgorithm[] AlgorithmsList = { new HuffmanCoding(), new ShannonFanoCoding(),
-            new ArithmeticCoding(), new RunLengthEncoding(), /*new LZ77(), new LZ78(), */ new AdaptiveArithmeticCoding()};
+            new ArithmeticCoding(), new RunLengthEncoding(), /*new LZ77(), */new LZ78(), new AdaptiveArithmeticCoding()};
 
         private static void Main(string[] args)
         {
