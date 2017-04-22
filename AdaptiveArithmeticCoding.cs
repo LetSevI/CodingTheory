@@ -6,7 +6,7 @@ namespace CodingTheory
 {
     public class AdaptiveArithmeticCoding : IAlgorithm
     {
-        private Dictionary<char, decimal> _weights = new Dictionary<char, decimal>();
+        private Dictionary<char, decimal> _frequencies = new Dictionary<char, decimal>();
         private double _compressionRatio = -1;
 
         public string GetName()
@@ -16,37 +16,42 @@ namespace CodingTheory
 
         public string Encode(string input)
         {
-            _weights = new Dictionary<char, decimal>();
+            _frequencies = new Dictionary<char, decimal>();
             _compressionRatio = -1;
             input += 'ソ';
 
             foreach (char ch in input)
             {
-                if (_weights.ContainsKey(ch)) continue;
-                decimal frequency = 1;
-                if (_weights.Count > 0)
+                if (_frequencies.ContainsKey(ch)) continue;
+                decimal frequency = 1.0m;
+                if (_frequencies.Count > 0)
                 {
-                    frequency += _weights.Max(x => x.Value);
+                    frequency += _frequencies.Max(x => x.Value);
                 }
-                _weights.Add(ch, frequency);
+                _frequencies.Add(ch, frequency);
             }
+            var symbols = _frequencies.Keys.ToList();
+            decimal sumOfFrequencies = symbols.Count;
+            var startFrequencies = new Dictionary<char, decimal>(_frequencies);
 
             decimal low = 0.0m;
             decimal high = 1.0m;
-            decimal sumOfWeights = _weights.Count;
 
             for (int i = 0; i < input.Length; i++)
             {
                 decimal range = high - low;
-                high = low + range * _weights[input[i]]/sumOfWeights;
-                if (_weights[input[i]] != _weights.Min(x => x.Value))
+                high = low + range * _frequencies[input[i]] / sumOfFrequencies;
+                if (_frequencies[input[i]] != _frequencies.Min(x => x.Value))
                 {
-                    low = low + range * _weights
-                        .Where(x => x.Value < _weights[input[i]])
-                        .Max(x => x.Value)/ sumOfWeights;
+                    low = low + range * _frequencies
+                        .Where(x => x.Value < _frequencies[input[i]])
+                        .Max(x => x.Value) / sumOfFrequencies;
                 }
-                _weights[input[i]]++;
-                sumOfWeights++;
+
+                for (var j = 0; j < symbols.Count; j++)
+                    if (_frequencies[symbols[j]] >= _frequencies[input[i]])
+                        _frequencies[symbols[j]]++;
+                sumOfFrequencies++;
             }
 
             string encodedString = low.ToString(CultureInfo.CurrentCulture);
@@ -54,12 +59,44 @@ namespace CodingTheory
 
             _compressionRatio = (double)(encodedString.Length * 4) / (input.Length * 8);
 
+            _frequencies = startFrequencies;
             return encodedString;
         }
 
         public string Decode(string input)
         {
-            return "";
+            decimal encodedMessage = decimal.Parse(
+                string.Format("0{0}{1}", CultureInfo.CurrentCulture.NumberFormat.CurrencyDecimalSeparator, input));
+
+            var symbols = _frequencies.Keys.ToList();
+            decimal sumOfFrequencies = (decimal)symbols.Count;
+
+            decimal low = 0.0m;
+            decimal high = 1.0m;
+            string decodedString = string.Empty;
+
+            while (decodedString == "" || decodedString[decodedString.Length - 1] != 'ソ')
+            {
+                decimal range = high - low;
+
+                high = low + range * _frequencies
+                        .Where(x => low + x.Value * range / sumOfFrequencies > encodedMessage)
+                        .Min(x => x.Value)/sumOfFrequencies;
+
+                char nextChar = _frequencies.FirstOrDefault(x => low + x.Value* range / sumOfFrequencies > encodedMessage).Key;
+                decodedString += nextChar;
+
+                if (_frequencies[nextChar] != _frequencies.Min(x => x.Value))
+                    low = low + range * _frequencies.Where(x => low + x.Value  * range / sumOfFrequencies <= encodedMessage)
+                          .Max(x => x.Value)/sumOfFrequencies;
+
+                for (var i = 0; i < symbols.Count; i++)
+                    if (_frequencies[symbols[i]] >= _frequencies[nextChar])
+                        _frequencies[symbols[i]]++;
+                sumOfFrequencies++;
+            }
+
+            return decodedString.Substring(0, decodedString.Length - 1);
         }
 
         public double GetCompressionRatio()
